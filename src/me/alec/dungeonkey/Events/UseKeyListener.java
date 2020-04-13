@@ -34,30 +34,33 @@ public class UseKeyListener implements Listener {
 
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
             // TODO: handle null pointer exception checking lore
-            List<String> itemLore = item.getItemMeta().getLore();
+            if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
+                List<String> itemLore = item.getItemMeta().getLore();
 
-            if (itemLore.size() > 0 && HiddenStringUtils.hasHiddenString(itemLore.get(0))) {
-                for (String key : config.getKeys(false)) {
+                if (itemLore.size() > 0 && HiddenStringUtils.hasHiddenString(itemLore.get(0))) {
+                    for (String key : config.getKeys(false)) {
 
-                    // Get hidden key name
-                    String name = HiddenStringUtils.extractHiddenString(itemLore.get(0));
-                    if (key.equals(name)) {
+                        // Get hidden key name
+                        String name = HiddenStringUtils.extractHiddenString(itemLore.get(0));
+                        if (key.equals(name)) {
 
-                        // Build location object
-                        String world = config.getString(key + ".world");
-                        assert world != null;
-                        Location location = new Location(
-                                plugin.getServer().getWorld(world),
-                                config.getDouble(key + ".coordinates.x"),
-                                config.getDouble(key + ".coordinates.y"),
-                                config.getDouble(key + ".coordinates.z")
-                        );
-                        player.teleport(location);
+                            // Build location object
+                            String world = config.getString(key + ".world");
+                            assert world != null;
+                            Location location = new Location(
+                                    plugin.getServer().getWorld(world),
+                                    config.getDouble(key + ".coordinates.x"),
+                                    config.getDouble(key + ".coordinates.y"),
+                                    config.getDouble(key + ".coordinates.z")
+                            );
+                            player.teleport(location);
 
-                        // Crashes if try to use inventory.remove()
-                        item.setAmount(0);
+                            // Crashes if try to use inventory.remove()
+                            item.setAmount(0);
+                        }
                     }
                 }
+
             }
         }
     }
