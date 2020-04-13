@@ -33,7 +33,6 @@ public class UseKeyListener implements Listener {
         Action action = event.getAction();
 
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
-            // TODO: handle null pointer exception checking lore
             if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
                 List<String> itemLore = item.getItemMeta().getLore();
 

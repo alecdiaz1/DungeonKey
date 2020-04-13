@@ -13,7 +13,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Random;
-import java.util.Set;
 
 public class MobDeathListener implements Listener {
     private final DungeonKey dungeonKey;
@@ -29,7 +28,6 @@ public class MobDeathListener implements Listener {
         Entity slainEntity = event.getEntity();
 
         if (slainEntity instanceof Monster) {
-            System.out.println("DEBUG > killed " + slainEntity.getName());
 
             int dropChance = random.nextInt(100);
 
@@ -68,8 +66,6 @@ public class MobDeathListener implements Listener {
             }
         }
 
-        System.out.println(keyNames[randomIndex]);
         return keyNames[randomIndex];
-//        return "iceDungeon";
     }
 }

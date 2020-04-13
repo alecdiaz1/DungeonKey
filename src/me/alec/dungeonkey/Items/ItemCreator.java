@@ -3,6 +3,7 @@ package me.alec.dungeonkey.Items;
 import me.alec.dungeonkey.DungeonKey;
 import me.alec.dungeonkey.HiddenStringUtils;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -18,9 +19,11 @@ public class ItemCreator {
     }
 
     public ItemStack createKey(String keyName) {
-        FileConfiguration config = dungeonKey.getConfig();
+        FileConfiguration configOriginal = dungeonKey.getConfig();
+        ConfigurationSection config = configOriginal.getConfigurationSection("keys");
 
-        ItemStack item = new ItemStack(Material.DIAMOND_AXE);
+        Material material = Material.valueOf(config.getString(keyName + ".material"));
+        ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
         String displayName = config.getString(keyName + ".displayName");
