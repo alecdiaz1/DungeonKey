@@ -3,6 +3,7 @@ package me.alec.dungeonkey.Events;
 import me.alec.dungeonkey.DungeonKey;
 import me.alec.dungeonkey.Items.ItemCreator;
 import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
@@ -12,6 +13,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Random;
+import java.util.Set;
 
 public class MobDeathListener implements Listener {
     private final DungeonKey dungeonKey;
@@ -23,13 +25,15 @@ public class MobDeathListener implements Listener {
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
+        FileConfiguration config = dungeonKey.getConfig();
         Entity slainEntity = event.getEntity();
 
         if (slainEntity instanceof Monster) {
             System.out.println("DEBUG > killed " + slainEntity.getName());
 
             int dropChance = random.nextInt(100);
-            if (dropChance < 50) {
+
+            if (dropChance < config.getInt("globals.dropRate")) {
                 String keyName = getRandomKey();
 
                 ItemStack newDungeonKey =  new ItemCreator(dungeonKey).createKey(keyName);
@@ -42,7 +46,8 @@ public class MobDeathListener implements Listener {
     }
 
     public String getRandomKey() {
-        FileConfiguration config = dungeonKey.getConfig();
+        FileConfiguration configOriginal = dungeonKey.getConfig();
+        ConfigurationSection config = configOriginal.getConfigurationSection("keys");
 
         String[] keyNames = config.getKeys(false).toArray(new String[0]);
 
@@ -56,9 +61,6 @@ public class MobDeathListener implements Listener {
         double randomNum = Math.random() * totalWeight;
 
         for (String key : config.getKeys(false)) {
-            System.out.println("DROP RATE");
-            System.out.println(config.get(key + ".dropRate"));
-
             randomNum -= config.getDouble(key + ".dropRate");
             if (randomNum <= 0.0d) {
                 randomIndex = ArrayUtils.indexOf(keyNames, key);
@@ -68,5 +70,6 @@ public class MobDeathListener implements Listener {
 
         System.out.println(keyNames[randomIndex]);
         return keyNames[randomIndex];
+//        return "iceDungeon";
     }
 }

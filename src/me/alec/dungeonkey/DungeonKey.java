@@ -3,7 +3,6 @@ package me.alec.dungeonkey;
 import me.alec.dungeonkey.Events.MobDeathListener;
 import me.alec.dungeonkey.Events.UseKeyListener;
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DungeonKey extends JavaPlugin {
