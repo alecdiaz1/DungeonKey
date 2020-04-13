@@ -1,26 +1,35 @@
-globals:
-  dropRate: 90
-
+# 
 # List of materials https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+globals:
+  dropRate: 50
 keys:
   iceDungeon:
     world: builderworld
     coordinates:
-      x: 90.00
-      y: 70.00
-      z: 100.00
+      x: 41.0
+      y: 80.0
+      z: -323
     material: SKELETON_SKULL
     displayName: Ice Dungeon Key
     item-lore: Right click to teleport to the Ice Dungeon!
-    dropRate: .75
-
-  fireDungeon:
+    dropRate: 0.5
+  endDungeon:
     world: builderworld
     coordinates:
-      x: 10.00
-      y: 50.00
-      z: 10.00
+      x: 188.0
+      y: 41.0
+      z: -254
     material: ZOMBIE_HEAD
-    displayName: Fire Dungeon Key
-    item-lore: Right click to teleport to the Fire Dungeon!
-    dropRate: .25
+    displayName: End Dungeon Key
+    item-lore: Right click to teleport to the End Dungeon!
+    dropRate: 0.3
+  waterDungeon:
+    world: builderworld
+    coordinates:
+      x: 188.0
+      y: 41.0
+      z: -254
+    material: CREEPER_HEAD
+    displayName: Water Dungeon Key
+    item-lore: Right click to teleport to the Water Dungeon!
+    dropRate: 0.3
