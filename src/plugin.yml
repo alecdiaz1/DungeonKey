@@ -1,0 +1,5 @@
+name: DungeonKey
+author: Alec Diaz
+version: 1.0.0
+main: me.alec.dungeonkey.DungeonKey
+description: Key to teleport players to dungeon

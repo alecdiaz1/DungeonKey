@@ -1,0 +1,9 @@
+iceDungeon:
+  world: builderworld
+  coordinates:
+    x: 90.00
+    y: 70.00
+    z: 100.00
+  displayName: Ice Dungeon Key
+  item-lore: Right click to teleport to the Ice Dungeon!
+  drop-rate: .75
