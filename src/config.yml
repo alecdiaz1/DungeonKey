@@ -6,4 +6,14 @@ iceDungeon:
     z: 100.00
   displayName: Ice Dungeon Key
   item-lore: Right click to teleport to the Ice Dungeon!
-  drop-rate: .75
+  dropRate: .75
+
+fireDungeon:
+  world: builderworld
+  coordinates:
+    x: 10.00
+    y: 50.00
+    z: 10.00
+  displayName: Fire Dungeon Key
+  item-lore: Right click to teleport to the Fire Dungeon!
+  dropRate: .25

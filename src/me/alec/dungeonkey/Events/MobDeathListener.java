@@ -2,6 +2,7 @@ package me.alec.dungeonkey.Events;
 
 import me.alec.dungeonkey.DungeonKey;
 import me.alec.dungeonkey.Items.ItemCreator;
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
@@ -25,7 +26,7 @@ public class MobDeathListener implements Listener {
         Entity slainEntity = event.getEntity();
 
         if (slainEntity instanceof Monster) {
-            System.out.println("DEBUG > killed" + slainEntity.getName());
+            System.out.println("DEBUG > killed " + slainEntity.getName());
 
             int dropChance = random.nextInt(100);
             if (dropChance < 50) {
@@ -43,7 +44,29 @@ public class MobDeathListener implements Listener {
     public String getRandomKey() {
         FileConfiguration config = dungeonKey.getConfig();
 
-        String[] items = config.getKeys(false).toArray(new String[0]);
-        return items[new Random().nextInt(items.length)];
+        String[] keyNames = config.getKeys(false).toArray(new String[0]);
+
+        double totalWeight = 0.0d;
+
+        for (String key : keyNames) {
+            totalWeight += config.getDouble(key + ".dropRate");
+        }
+
+        int randomIndex = -1;
+        double randomNum = Math.random() * totalWeight;
+
+        for (String key : config.getKeys(false)) {
+            System.out.println("DROP RATE");
+            System.out.println(config.get(key + ".dropRate"));
+
+            randomNum -= config.getDouble(key + ".dropRate");
+            if (randomNum <= 0.0d) {
+                randomIndex = ArrayUtils.indexOf(keyNames, key);
+                break;
+            }
+        }
+
+        System.out.println(keyNames[randomIndex]);
+        return keyNames[randomIndex];
     }
 }
