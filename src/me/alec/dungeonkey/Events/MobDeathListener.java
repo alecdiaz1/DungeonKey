@@ -14,6 +14,7 @@ import java.util.Random;
 
 public class MobDeathListener implements Listener {
     private final DungeonKey dungeonKey;
+    private Random random = new Random();
 
     public MobDeathListener(DungeonKey dungeonKey) {
         this.dungeonKey = dungeonKey;
@@ -26,7 +27,7 @@ public class MobDeathListener implements Listener {
         if (slainEntity instanceof Monster) {
             System.out.println("DEBUG > killed" + slainEntity.getName());
 
-            int dropChance = new Random().nextInt(100);
+            int dropChance = random.nextInt(100);
             if (dropChance < 50) {
                 String keyName = getRandomKey();
 
