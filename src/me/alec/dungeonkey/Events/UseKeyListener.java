@@ -12,8 +12,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Objects;
 
 public class UseKeyListener implements Listener {
     private DungeonKey plugin;
@@ -24,31 +26,36 @@ public class UseKeyListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        Block block = event.getClickedBlock();
         FileConfiguration config = plugin.getConfig();
 
-        if (event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-            List<String> itemLore = player.getInventory().getItemInMainHand().getItemMeta().getLore();
-            System.out.println(itemLore);
+        Player player = event.getPlayer();
+        ItemStack item = event.getItem();
+        Action action = event.getAction();
 
-            for (String key : config.getKeys(false)) {
-                String name = HiddenStringUtils.extractHiddenString(itemLore.get(0));
+        if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
+            // TODO: handle null pointer exception checking lore
+            List<String> itemLore = item.getItemMeta().getLore();
 
-                if (key.equals(name)) {
-                    String world = config.getString(key + ".world");
-                    Location location = new Location(
-                            plugin.getServer().getWorld(world),
-                            config.getDouble(key + ".coordinates.x"),
-                            config.getDouble(key + ".coordinates.y"),
-                            config.getDouble(key + ".coordinates.z")
-                    );
+            if (itemLore.size() > 0 && HiddenStringUtils.hasHiddenString(itemLore.get(0))) {
+                for (String key : config.getKeys(false)) {
 
-                    System.out.println("DEBUG > " + key + name);
-                    System.out.println("DEBUG > " + location);
+                    // Get hidden key name
+                    String name = HiddenStringUtils.extractHiddenString(itemLore.get(0));
+                    if (key.equals(name)) {
 
-                    if (itemLore.size() > 0 && HiddenStringUtils.hasHiddenString(itemLore.get(0))) {
+                        // Build location object
+                        String world = config.getString(key + ".world");
+                        assert world != null;
+                        Location location = new Location(
+                                plugin.getServer().getWorld(world),
+                                config.getDouble(key + ".coordinates.x"),
+                                config.getDouble(key + ".coordinates.y"),
+                                config.getDouble(key + ".coordinates.z")
+                        );
                         player.teleport(location);
+
+                        // Crashes if try to use inventory.remove()
+                        item.setAmount(0);
                     }
                 }
             }
