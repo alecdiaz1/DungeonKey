@@ -6,6 +6,7 @@ import me.alec.dungeonkey.Items.ItemCreator;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,15 +19,16 @@ import java.util.List;
 import java.util.Objects;
 
 public class UseKeyListener implements Listener {
-    private DungeonKey plugin;
+    private final DungeonKey dungeonKey;
 
     public UseKeyListener(DungeonKey dungeonKey) {
-        plugin = dungeonKey;
+        this.dungeonKey = dungeonKey;
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        FileConfiguration config = plugin.getConfig();
+        FileConfiguration configOriginal = dungeonKey.getConfig();
+        ConfigurationSection config = configOriginal.getConfigurationSection("keys");
 
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
@@ -41,17 +43,20 @@ public class UseKeyListener implements Listener {
 
                         // Get hidden key name
                         String name = HiddenStringUtils.extractHiddenString(itemLore.get(0));
+                        System.out.println(name);
                         if (key.equals(name)) {
 
                             // Build location object
                             String world = config.getString(key + ".world");
                             assert world != null;
                             Location location = new Location(
-                                    plugin.getServer().getWorld(world),
+                                    dungeonKey.getServer().getWorld(world),
                                     config.getDouble(key + ".coordinates.x"),
                                     config.getDouble(key + ".coordinates.y"),
-                                    config.getDouble(key + ".coordinates.z")
-                            );
+                                    config.getDouble(key + ".coordinates.z"),
+                                    (float) config.getDouble(key + ".coordinates.yaw"),
+                                    (float) config.getDouble(key + ".coordinates.pitch")
+                                );
                             player.teleport(location);
 
                             // Crashes if try to use inventory.remove()
