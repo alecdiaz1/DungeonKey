@@ -61,7 +61,7 @@ public class CommandListener implements CommandExecutor {
 
     private void createParty(Player player) {
         for (Party party : dungeonKey.allParties) {
-            if (party.getMembers().contains(player)) {
+            if (party.getMembers().containsKey(player)) {
                 player.sendMessage("You're already in a party! Please leave your party with /dk leave to leave your current party.");
                 return;
             }
@@ -73,7 +73,7 @@ public class CommandListener implements CommandExecutor {
 
     private void leaveParty(Player player) {
         for (Party party : dungeonKey.allParties) {
-            if (party.getMembers().contains(player)) {
+            if (party.getMembers().containsKey(player)) {
                 party.members.remove(player);
 
                 // Remove party from all parties list if empty/last member leaves
@@ -90,7 +90,7 @@ public class CommandListener implements CommandExecutor {
     private void acceptInvite(Player player) {
         for (Party party : dungeonKey.allParties) {
             if (party.getInvitedMembers().contains(player)) {
-                party.members.add(player);
+                party.members.put(player, false);
                 party.invitedMembers.remove(player);
                 player.sendMessage("You accepted the invite to join the party.");
                 return;
@@ -112,8 +112,8 @@ public class CommandListener implements CommandExecutor {
 
     private void disbandParty(Player player) {
         for (Party party : dungeonKey.allParties) {
-            if (party.getMembers().contains(player)) {
-                for (Player p : party.getMembers()) {
+            if (party.getMembers().containsKey(player)) {
+                for (Player p : party.getMembers().keySet()) {
                     p.sendMessage("Your party was disbanded.");
                 }
                 dungeonKey.allParties.remove(party);
@@ -125,7 +125,7 @@ public class CommandListener implements CommandExecutor {
 
     private void getParty(Player player) {
         for (Party party : dungeonKey.allParties) {
-            if (party.getMembers().contains(player)) {
+            if (party.getMembers().containsKey(player)) {
                 player.sendMessage("Your party: " + party.getMembers().toString());
             }
         }

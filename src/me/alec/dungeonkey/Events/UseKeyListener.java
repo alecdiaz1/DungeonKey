@@ -72,7 +72,7 @@ public class UseKeyListener implements Listener {
                 (float) config.getDouble(key + ".coordinates.pitch")
         );
 
-        for (Player p : party.getMembers()) {
+        for (Player p : party.getMembers().keySet()) {
             p.teleport(location);
         }
     }

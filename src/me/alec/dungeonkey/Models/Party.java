@@ -3,18 +3,20 @@ package me.alec.dungeonkey.Models;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Party  {
+    // TODO: make variables private, use only getters/setters
     public Player host;
     public String dungeonName;
-    public ArrayList<Player> members;
+    public HashMap<Player, Boolean> members;
     public ArrayList<Player> invitedMembers;
 
     public Party(Player player) {
         this.host = player;
-        this.members = new ArrayList<>();
+        this.members = new HashMap<>();
         this.invitedMembers = new ArrayList<>();
-        members.add(player);
+        members.put(player, false);
     }
 
     public Player getHost() {
@@ -33,11 +35,11 @@ public class Party  {
         this.dungeonName = dungeonName;
     }
 
-    public ArrayList<Player> getMembers() {
+    public HashMap<Player, Boolean> getMembers() {
         return this.members;
     }
 
-    public void setMembers(ArrayList<Player> members) {
+    public void setMembers(HashMap<Player, Boolean> members) {
         this.members = members;
     }
 
