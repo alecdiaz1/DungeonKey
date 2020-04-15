@@ -68,6 +68,7 @@ public class CommandListener implements CommandExecutor {
         }
         Party newParty = new Party(player);
         dungeonKey.allParties.add(newParty);
+        player.sendMessage("Successfully created a party.");
     }
 
     private void leaveParty(Player player) {
@@ -135,10 +136,23 @@ public class CommandListener implements CommandExecutor {
         System.out.println(invitee + " < invitee");
         if (invitee == null) {
             host.sendMessage("Player not found.");
+        } else if (host == invitee) {
+            host.sendMessage("You can't invite yourself to a party!");
         } else {
-            host.sendMessage("Invited " + inviteeName + " to join your party.");
-            invitee.sendMessage("You have been invited to join " + host.getDisplayName() + "'s party. " +
-                    "\nType /dk accept to accept the invite or /dk deny to deny the invite.");
+            if (dungeonKey.allParties.size() > 0) {
+                for (Party party : dungeonKey.allParties) {
+                    if (party.getHost() == host) {
+                        party.invitedMembers.add(invitee);
+                        host.sendMessage("Invited " + inviteeName + " to join your party.");
+                        invitee.sendMessage("You have been invited to join " + host.getDisplayName() + "'s party. " +
+                                "\nType /dk accept to accept the invite or /dk deny to deny the invite.");
+                    } else {
+                        host.sendMessage("You are not the host of a party.");
+                    }
+                }
+            } else {
+                host.sendMessage("You are not the host of a party.");
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ public class Party  {
     public Party(Player player) {
         this.host = player;
         this.members = new ArrayList<>();
+        this.invitedMembers = new ArrayList<>();
         members.add(player);
     }
 
