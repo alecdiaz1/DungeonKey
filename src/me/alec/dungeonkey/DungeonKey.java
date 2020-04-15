@@ -3,10 +3,15 @@ package me.alec.dungeonkey;
 import me.alec.dungeonkey.Events.CommandListener;
 import me.alec.dungeonkey.Events.MobDeathListener;
 import me.alec.dungeonkey.Events.UseKeyListener;
+import me.alec.dungeonkey.Models.Party;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+
 public class DungeonKey extends JavaPlugin {
+    public ArrayList<Party> allParties = new ArrayList<>();
+
     public void onEnable() {
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
