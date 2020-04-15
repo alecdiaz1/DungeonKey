@@ -14,11 +14,11 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Random;
 
-public class MobDeathListener implements Listener {
+public class DeathListener implements Listener {
     private final DungeonKey dungeonKey;
     private Random random = new Random();
 
-    public MobDeathListener(DungeonKey dungeonKey) {
+    public DeathListener(DungeonKey dungeonKey) {
         this.dungeonKey = dungeonKey;
     }
 
