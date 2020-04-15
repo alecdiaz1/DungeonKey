@@ -11,6 +11,7 @@ public class Party  {
     public String dungeonName;
     public HashMap<Player, Boolean> members;
     public ArrayList<Player> invitedMembers;
+    public boolean inDungeon = false;
 
     public Party(Player player) {
         this.host = player;
