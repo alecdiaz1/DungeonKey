@@ -40,17 +40,16 @@ public class UseKeyListener implements Listener {
 
                         // Get hidden key name
                         String name = HiddenStringUtils.extractHiddenString(itemLore.get(0));
-                        System.out.println(name);
                         if (key.equals(name)) {
                             if (isPlayerHost(player)) {
-                                if (!checkDungeonInProgress(key)) {
+                                if (!dungeonInProgress(key)) {
                                     teleportPlayers(getHostParty(player), key);
+                                    item.setAmount(0);
                                 } else {
                                     player.sendMessage("Another party is currently in the dungeon.");
                                 }
 
                                 // Crashes if try to use inventory.remove()
-                                item.setAmount(0);
                             } else {
                                 player.sendMessage("You must be the host of a party to use the key!");
                             }
@@ -62,7 +61,7 @@ public class UseKeyListener implements Listener {
         }
     }
 
-    private boolean checkDungeonInProgress(String key) {
+    private boolean dungeonInProgress(String key) {
         for (Party party : dungeonKey.allParties) {
             if (party.dungeonName.equals(key) && party.inDungeon) {
                 return true;
@@ -90,6 +89,7 @@ public class UseKeyListener implements Listener {
             p.teleport(location);
         }
 
+        party.dungeonName = key;
         party.inDungeon = true;
     }
 
