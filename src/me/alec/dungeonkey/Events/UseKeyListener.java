@@ -13,6 +13,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class UseKeyListener implements Listener {
@@ -50,6 +51,8 @@ public class UseKeyListener implements Listener {
                                 }
 
                                 // Crashes if try to use inventory.remove()
+                            } else {
+                                player.sendMessage("You must be the host of a party and not in a dungeon.");
                             }
                         }
                     }

@@ -65,6 +65,7 @@ public class DeathListener implements Listener {
                 party.dungeonName = "";
                 for (Player p : party.getMembers().keySet()) {
                     p.sendMessage("Your entire party was slain.");
+                    party.getMembers().put(p, false);
                 }
             }
         }
