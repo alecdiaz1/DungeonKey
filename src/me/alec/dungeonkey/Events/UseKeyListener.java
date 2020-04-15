@@ -75,6 +75,8 @@ public class UseKeyListener implements Listener {
         for (Player p : party.getMembers().keySet()) {
             p.teleport(location);
         }
+
+        party.inDungeon = true;
     }
 
     private boolean isPlayerHost(Player player) {
