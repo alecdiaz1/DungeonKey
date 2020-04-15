@@ -1,7 +1,7 @@
 package me.alec.dungeonkey.Events;
 
 import me.alec.dungeonkey.DungeonKey;
-import me.alec.dungeonkey.Items.ItemCreator;
+import me.alec.dungeonkey.Items.KeyCreator;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -34,7 +34,7 @@ public class MobDeathListener implements Listener {
             if (dropChance < config.getInt("globals.dropRate")) {
                 String keyName = getRandomKey();
 
-                ItemStack newDungeonKey =  new ItemCreator(dungeonKey).createKey(keyName);
+                ItemStack newDungeonKey =  new KeyCreator(dungeonKey).createKey(keyName);
 
                 slainEntity.getLocation().getWorld().dropItem(
                         slainEntity.getLocation(),

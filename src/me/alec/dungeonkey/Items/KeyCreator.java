@@ -11,10 +11,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
-public class ItemCreator {
+public class KeyCreator {
     private final DungeonKey dungeonKey;
 
-    public ItemCreator(DungeonKey dungeonKey) {
+    public KeyCreator(DungeonKey dungeonKey) {
         this.dungeonKey = dungeonKey;
     }
 
