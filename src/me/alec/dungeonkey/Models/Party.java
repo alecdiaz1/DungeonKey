@@ -8,6 +8,7 @@ public class Party  {
     public Player host;
     public String dungeonName;
     public ArrayList<Player> members;
+    public ArrayList<Player> invitedMembers;
 
     public Party(Player player) {
         this.host = player;
@@ -37,5 +38,13 @@ public class Party  {
 
     public void setMembers(ArrayList<Player> members) {
         this.members = members;
+    }
+
+    public ArrayList<Player> getInvitedMembers() {
+        return this.invitedMembers;
+    }
+
+    public void setInvitedMembers(ArrayList<Player> invitedMembers) {
+        this.invitedMembers = invitedMembers;
     }
 }

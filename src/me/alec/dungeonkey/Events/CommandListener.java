@@ -40,6 +40,12 @@ public class CommandListener implements CommandExecutor {
                     case "party":
                         getParty(player);
                         break;
+                    case "accept":
+                        acceptInvite(player);
+                        break;
+                    case "deny":
+                        denyInvite(player);
+                        break;
                     case "invite":
                         if (args.length == 2) {
                             inviteToParty(player, args[1]);
@@ -75,6 +81,29 @@ public class CommandListener implements CommandExecutor {
                 }
 
                 player.sendMessage("You have left your current party.");
+                return;
+            }
+        }
+    }
+
+    private void acceptInvite(Player player) {
+        for (Party party : dungeonKey.allParties) {
+            if (party.getInvitedMembers().contains(player)) {
+                party.members.add(player);
+                party.invitedMembers.remove(player);
+                player.sendMessage("You accepted the invite to join the party.");
+                return;
+            } else {
+                player.sendMessage("You don't have any pending invites.");
+            }
+        }
+    }
+
+    private void denyInvite(Player player) {
+        for (Party party : dungeonKey.allParties) {
+            if (party.getInvitedMembers().contains(player)) {
+                party.invitedMembers.remove(player);
+                player.sendMessage("You denied the invite to join the party.");
                 return;
             }
         }
