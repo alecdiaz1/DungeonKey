@@ -1,4 +1,4 @@
-package me.alec.dungeonkey;
+package me.alec.dungeonkey.Models;
 
 import org.bukkit.entity.Player;
 
