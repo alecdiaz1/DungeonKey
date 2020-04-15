@@ -83,6 +83,8 @@ public class CommandListener implements CommandExecutor {
 
                 player.sendMessage("You have left your current party.");
                 return;
+            } else {
+                player.sendMessage("You are not currently in a party.");
             }
         }
     }
