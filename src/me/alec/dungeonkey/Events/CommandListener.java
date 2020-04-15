@@ -129,8 +129,10 @@ public class CommandListener implements CommandExecutor {
         for (Party party : dungeonKey.allParties) {
             if (party.getMembers().containsKey(player)) {
                 player.sendMessage("Your party: " + party.getMembers().toString());
+                return;
             }
         }
+        player.sendMessage("You are not currently in a party.");
     }
 
     private void inviteToParty(Player host, String inviteeName) {
