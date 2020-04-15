@@ -43,7 +43,12 @@ public class UseKeyListener implements Listener {
                         System.out.println(name);
                         if (key.equals(name)) {
                             if (isPlayerHost(player)) {
-                                teleportPlayers(getHostParty(player), key);
+                                if (!checkDungeonInProgress(key)) {
+                                    teleportPlayers(getHostParty(player), key);
+                                } else {
+                                    player.sendMessage("Another party is currently in the dungeon.");
+                                }
+
                                 // Crashes if try to use inventory.remove()
                                 item.setAmount(0);
                             } else {
@@ -55,6 +60,15 @@ public class UseKeyListener implements Listener {
 
             }
         }
+    }
+
+    private boolean checkDungeonInProgress(String key) {
+        for (Party party : dungeonKey.allParties) {
+            if (party.dungeonName.equals(key) && party.inDungeon) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void teleportPlayers(Party party, String key) {
