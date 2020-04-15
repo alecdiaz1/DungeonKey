@@ -41,7 +41,7 @@ public class UseKeyListener implements Listener {
                         // Get hidden key name
                         String name = HiddenStringUtils.extractHiddenString(itemLore.get(0));
                         if (key.equals(name)) {
-                            if (isPlayerHost(player)) {
+                            if (canPlayerStartDungeon(player)) {
                                 if (!dungeonInProgress(key)) {
                                     teleportPlayers(getHostParty(player), key);
                                     item.setAmount(0);
@@ -50,8 +50,6 @@ public class UseKeyListener implements Listener {
                                 }
 
                                 // Crashes if try to use inventory.remove()
-                            } else {
-                                player.sendMessage("You must be the host of a party to use the key!");
                             }
                         }
                     }
@@ -93,10 +91,16 @@ public class UseKeyListener implements Listener {
         party.inDungeon = true;
     }
 
-    private boolean isPlayerHost(Player player) {
+    private boolean canPlayerStartDungeon(Player player) {
         for (Party party : dungeonKey.allParties) {
             if (party.getHost() == player) {
-                return true;
+                if (!party.inDungeon) {
+                    return true;
+                } else {
+                    player.sendMessage("You are already in a dungeon!");
+                }
+            } else {
+                player.sendMessage("You must be the host of a party to use the key!");
             }
         }
         return false;
