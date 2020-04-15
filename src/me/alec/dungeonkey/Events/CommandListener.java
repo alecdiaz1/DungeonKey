@@ -27,25 +27,39 @@ public class CommandListener implements CommandExecutor {
 
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("create")) {
-                    Party newParty = new Party(player);
-                    dungeonKey.allParties.add(newParty);
+                    createParty(player);
                 } else if (args[0].equalsIgnoreCase("party")) {
-                    for (Party party : dungeonKey.allParties) {
-                        if (party.getMembers().contains(player)) {
-                            player.sendMessage("Your party: " + party.getMembers().toString());
-                            System.out.println(party.getMembers());
-                        }
-                    }
+                    getParty(player);
                 } else if (args[0].equalsIgnoreCase("invite")) {
-                    try {
-                        Player invitee = dungeonKey.getServer().getPlayer(args[0]);
-                    } catch(Exception e) {
-                        player.sendMessage("Player not found.");
-                    }
+                    inviteToParty(player, args[1]);
                 }
             }
         }
         System.out.println(dungeonKey.allParties + " < ALL PARTIES");
         return true;
+    }
+
+    private void createParty(Player player) {
+        Party newParty = new Party(player);
+        dungeonKey.allParties.add(newParty);
+    }
+
+    private void getParty(Player player) {
+        for (Party party : dungeonKey.allParties) {
+            if (party.getMembers().contains(player)) {
+                player.sendMessage("Your party: " + party.getMembers().toString());
+                System.out.println(party.getMembers());
+            }
+        }
+    }
+
+    private void inviteToParty(Player host, String inviteeName) {
+        Player invitee = dungeonKey.getServer().getPlayerExact(inviteeName);
+        System.out.println(invitee + " < invitee");
+        if (invitee == null) {
+            host.sendMessage("Player not found.");
+        } else {
+            host.sendMessage("Invited " + inviteeName + " to join your party.");
+        }
     }
 }
