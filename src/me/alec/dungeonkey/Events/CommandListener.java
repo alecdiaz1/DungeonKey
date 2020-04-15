@@ -26,12 +26,20 @@ public class CommandListener implements CommandExecutor {
             player.sendMessage("command received");
 
             if (args.length > 0) {
-                if (args[0].equalsIgnoreCase("create")) {
-                    createParty(player);
-                } else if (args[0].equalsIgnoreCase("party")) {
-                    getParty(player);
-                } else if (args[0].equalsIgnoreCase("invite")) {
-                    inviteToParty(player, args[1]);
+                String action = args[0].toLowerCase();
+                switch(action) {
+                    case "create":
+                        createParty(player);
+                        break;
+                    case "party":
+                        getParty(player);
+                        break;
+                    case "invite":
+                        if (args.length == 2) {
+                            inviteToParty(player, args[1]);
+                        } else {
+                            player.sendMessage("Please specify a player to invite.");
+                        }
                 }
             }
         }
@@ -40,6 +48,12 @@ public class CommandListener implements CommandExecutor {
     }
 
     private void createParty(Player player) {
+        for (Party party : dungeonKey.allParties) {
+            if (party.getMembers().contains(player)) {
+                player.sendMessage("You're already in a party! Please leave your party with /dk leave to leave your current party.");
+                return;
+            }
+        }
         Party newParty = new Party(player);
         dungeonKey.allParties.add(newParty);
     }
@@ -48,7 +62,6 @@ public class CommandListener implements CommandExecutor {
         for (Party party : dungeonKey.allParties) {
             if (party.getMembers().contains(player)) {
                 player.sendMessage("Your party: " + party.getMembers().toString());
-                System.out.println(party.getMembers());
             }
         }
     }
