@@ -9,6 +9,10 @@ public class Party  {
     public String dungeonName;
     public ArrayList<Player> members;
 
+    public Party(Player player) {
+        this.host = player;
+    }
+
     public Player getHost() {
         return host;
     }
