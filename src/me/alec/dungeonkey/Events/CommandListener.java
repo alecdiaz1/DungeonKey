@@ -21,19 +21,31 @@ public class CommandListener implements CommandExecutor {
         if (sender instanceof Player) {
             FileConfiguration config =  dungeonKey.getConfig();
 
-            Player host = (Player) sender;
+            Player player = (Player) sender;
 
-            host.sendMessage("command received");
+            player.sendMessage("command received");
 
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("create")) {
-                    Party newParty = new Party(host);
+                    Party newParty = new Party(player);
                     dungeonKey.allParties.add(newParty);
-
-                    System.out.println(dungeonKey.allParties + " < ALL PARTIES");
+                } else if (args[0].equalsIgnoreCase("party")) {
+                    for (Party party : dungeonKey.allParties) {
+                        if (party.getMembers().contains(player)) {
+                            player.sendMessage("Your party: " + party.getMembers().toString());
+                            System.out.println(party.getMembers());
+                        }
+                    }
+                } else if (args[0].equalsIgnoreCase("invite")) {
+                    try {
+                        Player invitee = dungeonKey.getServer().getPlayer(args[0]);
+                    } catch(Exception e) {
+                        player.sendMessage("Player not found.");
+                    }
                 }
             }
         }
+        System.out.println(dungeonKey.allParties + " < ALL PARTIES");
         return true;
     }
 }

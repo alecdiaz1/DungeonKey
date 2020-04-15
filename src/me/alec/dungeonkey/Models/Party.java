@@ -11,10 +11,12 @@ public class Party  {
 
     public Party(Player player) {
         this.host = player;
+        this.members = new ArrayList<>();
+        members.add(player);
     }
 
     public Player getHost() {
-        return host;
+        return this.host;
     }
 
     public void setHost(Player host) {
@@ -22,7 +24,7 @@ public class Party  {
     }
 
     public String getDungeonName() {
-        return dungeonName;
+        return this.dungeonName;
     }
 
     public void setDungeonName(String dungeonName) {
@@ -30,7 +32,7 @@ public class Party  {
     }
 
     public ArrayList<Player> getMembers() {
-        return members;
+        return this.members;
     }
 
     public void setMembers(ArrayList<Player> members) {
