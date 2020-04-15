@@ -31,6 +31,12 @@ public class CommandListener implements CommandExecutor {
                     case "create":
                         createParty(player);
                         break;
+                    case "leave":
+                        leaveParty(player);
+                        break;
+                    case "disband":
+                        disbandParty(player);
+                        break;
                     case "party":
                         getParty(player);
                         break;
@@ -56,6 +62,35 @@ public class CommandListener implements CommandExecutor {
         }
         Party newParty = new Party(player);
         dungeonKey.allParties.add(newParty);
+    }
+
+    private void leaveParty(Player player) {
+        for (Party party : dungeonKey.allParties) {
+            if (party.getMembers().contains(player)) {
+                party.members.remove(player);
+
+                // Remove party from all parties list if empty/last member leaves
+                if (party.members.size() == 0) {
+                    dungeonKey.allParties.remove(party);
+                }
+
+                player.sendMessage("You have left your current party.");
+                return;
+            }
+        }
+    }
+
+    private void disbandParty(Player player) {
+        for (Party party : dungeonKey.allParties) {
+            if (party.getMembers().contains(player)) {
+                for (Player p : party.getMembers()) {
+                    p.sendMessage("Your party was disbanded.");
+                }
+                dungeonKey.allParties.remove(party);
+                player.sendMessage("You disbanded the party.");
+                return;
+            }
+        }
     }
 
     private void getParty(Player player) {
