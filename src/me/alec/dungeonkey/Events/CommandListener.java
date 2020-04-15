@@ -60,6 +60,8 @@ public class CommandListener implements CommandExecutor {
             host.sendMessage("Player not found.");
         } else {
             host.sendMessage("Invited " + inviteeName + " to join your party.");
+            invitee.sendMessage("You have been invited to join " + host.getDisplayName() + "'s party. " +
+                    "\nType /dk accept to accept the invite or /dk deny to deny the invite.");
         }
     }
 }
