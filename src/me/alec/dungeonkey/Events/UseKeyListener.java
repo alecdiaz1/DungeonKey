@@ -2,6 +2,7 @@ package me.alec.dungeonkey.Events;
 
 import me.alec.dungeonkey.DungeonKey;
 import me.alec.dungeonkey.HiddenStringUtils;
+import me.alec.dungeonkey.Models.Party;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -41,27 +42,56 @@ public class UseKeyListener implements Listener {
                         String name = HiddenStringUtils.extractHiddenString(itemLore.get(0));
                         System.out.println(name);
                         if (key.equals(name)) {
-
-                            // Build location object
-                            String world = config.getString(key + ".world");
-                            assert world != null;
-                            Location location = new Location(
-                                    dungeonKey.getServer().getWorld(world),
-                                    config.getDouble(key + ".coordinates.x"),
-                                    config.getDouble(key + ".coordinates.y"),
-                                    config.getDouble(key + ".coordinates.z"),
-                                    (float) config.getDouble(key + ".coordinates.yaw"),
-                                    (float) config.getDouble(key + ".coordinates.pitch")
-                                );
-                            player.teleport(location);
-
-                            // Crashes if try to use inventory.remove()
-                            item.setAmount(0);
+                            if (isPlayerHost(player)) {
+                                teleportPlayers(getHostParty(player), key);
+                                // Crashes if try to use inventory.remove()
+                                item.setAmount(0);
+                            } else {
+                                player.sendMessage("You must be the host of a party to use the key!");
+                            }
                         }
                     }
                 }
 
             }
         }
+    }
+
+    private void teleportPlayers(Party party, String key) {
+        FileConfiguration configOriginal = dungeonKey.getConfig();
+        ConfigurationSection config = configOriginal.getConfigurationSection("keys");
+
+        String world = config.getString(key + ".world");
+        assert world != null;
+        Location location = new Location(
+                dungeonKey.getServer().getWorld(world),
+                config.getDouble(key + ".coordinates.x"),
+                config.getDouble(key + ".coordinates.y"),
+                config.getDouble(key + ".coordinates.z"),
+                (float) config.getDouble(key + ".coordinates.yaw"),
+                (float) config.getDouble(key + ".coordinates.pitch")
+        );
+
+        for (Player p : party.getMembers()) {
+            p.teleport(location);
+        }
+    }
+
+    private boolean isPlayerHost(Player player) {
+        for (Party party : dungeonKey.allParties) {
+            if (party.getHost() == player) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Party getHostParty(Player player) {
+        for (Party party : dungeonKey.allParties) {
+            if (party.getHost() == player) {
+                return party;
+            }
+        }
+        return null;
     }
 }
