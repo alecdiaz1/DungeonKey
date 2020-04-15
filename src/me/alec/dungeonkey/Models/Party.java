@@ -17,6 +17,7 @@ public class Party  {
         this.host = player;
         this.members = new HashMap<>();
         this.invitedMembers = new ArrayList<>();
+        this.dungeonName = "";
         members.put(player, false);
     }
 
