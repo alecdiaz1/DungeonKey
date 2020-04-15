@@ -2,10 +2,7 @@ package me.alec.dungeonkey.Events;
 
 import me.alec.dungeonkey.DungeonKey;
 import me.alec.dungeonkey.HiddenStringUtils;
-import me.alec.dungeonkey.Items.ItemCreator;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -16,7 +13,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.Objects;
 
 public class UseKeyListener implements Listener {
     private final DungeonKey dungeonKey;
