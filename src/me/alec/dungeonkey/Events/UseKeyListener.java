@@ -38,26 +38,33 @@ public class UseKeyListener implements Listener {
 
                 if (itemLore.size() > 0 && HiddenStringUtils.hasHiddenString(itemLore.get(0))) {
                     for (String key : config.getKeys(false)) {
-
                         // Get hidden key name
                         String name = HiddenStringUtils.extractHiddenString(itemLore.get(0));
                         if (key.equals(name)) {
-                            if (canPlayerStartDungeon(player)) {
-                                if (!dungeonInProgress(key)) {
-                                    teleportPlayers(getHostParty(player), key);
-                                    item.setAmount(0);
+                            Party playerParty = getPlayerParty(player);
+                            if (playerParty != null) {
+                                if (playerParty.getHost() == player) {
+                                    if (!playerParty.inDungeon) {
+                                        if (teleportPlayers(playerParty, key)) {
+                                            item.setAmount(0);
+                                            playerParty.dungeonName = key;
+                                            playerParty.inDungeon = true;
+                                        } else {
+                                            player.sendMessage("Another party is currently in the dungeon.");
+                                        }
+                                        // Crashes if try to use inventory.remove()
+                                    } else {
+                                        player.sendMessage("You are already in a dungeon!");
+                                    }
                                 } else {
-                                    player.sendMessage("Another party is currently in the dungeon.");
+                                    player.sendMessage("You must be the host of a party to do start a dungeon!");
                                 }
-
-                                // Crashes if try to use inventory.remove()
                             } else {
-                                player.sendMessage("You must be the host of a party and not in a dungeon.");
+                                player.sendMessage("You must be the host of a party to do start a dungeon!");
                             }
                         }
                     }
                 }
-
             }
         }
     }
@@ -71,9 +78,16 @@ public class UseKeyListener implements Listener {
         return false;
     }
 
-    private void teleportPlayers(Party party, String key) {
+    private boolean teleportPlayers(Party party, String key) {
         FileConfiguration configOriginal = dungeonKey.getConfig();
         ConfigurationSection config = configOriginal.getConfigurationSection("keys");
+
+        // Check if any party in dungeon already, return false if so
+        for (Party p : dungeonKey.allParties) {
+            if (p.getDungeonName().equals(key)) {
+                return false;
+            }
+        }
 
         String world = config.getString(key + ".world");
         assert world != null;
@@ -90,24 +104,18 @@ public class UseKeyListener implements Listener {
             p.teleport(location);
         }
 
-        party.dungeonName = key;
-        party.inDungeon = true;
+        return true;
     }
 
-    private boolean canPlayerStartDungeon(Player player) {
+    private Party getPlayerParty(Player player) {
         for (Party party : dungeonKey.allParties) {
-            if (party.getHost() == player) {
-                if (!party.inDungeon) {
-                    return true;
-                } else {
-                    player.sendMessage("You are already in a dungeon!");
-                }
-            } else {
-                player.sendMessage("You must be the host of a party to use the key!");
+            if (party.getMembers().containsKey(player)) {
+                return party;
             }
         }
-        return false;
+        return null;
     }
+
 
     private Party getHostParty(Player player) {
         for (Party party : dungeonKey.allParties) {

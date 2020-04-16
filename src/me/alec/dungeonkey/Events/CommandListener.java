@@ -82,6 +82,9 @@ public class CommandListener implements CommandExecutor {
                 }
 
                 player.sendMessage("You have left your current party.");
+                for (Player p : party.getMembers().keySet()) {
+                    p.sendMessage(player.getDisplayName() + " has left the party.");
+                }
                 return;
             } else {
                 player.sendMessage("You are not currently in a party.");
@@ -95,6 +98,9 @@ public class CommandListener implements CommandExecutor {
                 party.members.put(player, false);
                 party.invitedMembers.remove(player);
                 player.sendMessage("You accepted the invite to join the party.");
+                for (Player p : party.getMembers().keySet()) {
+                    p.sendMessage(player.getDisplayName() + " has joined the party.");
+                }
                 return;
             } else {
                 player.sendMessage("You don't have any pending invites.");
@@ -114,13 +120,15 @@ public class CommandListener implements CommandExecutor {
 
     private void disbandParty(Player player) {
         for (Party party : dungeonKey.allParties) {
-            if (party.getMembers().containsKey(player)) {
+            if (party.getHost() == player) {
+                player.sendMessage("You disbanded the party.");
                 for (Player p : party.getMembers().keySet()) {
                     p.sendMessage("Your party was disbanded.");
                 }
                 dungeonKey.allParties.remove(party);
-                player.sendMessage("You disbanded the party.");
                 return;
+            } else {
+                player.sendMessage("You need to be the host of a party to disband it!");
             }
         }
     }

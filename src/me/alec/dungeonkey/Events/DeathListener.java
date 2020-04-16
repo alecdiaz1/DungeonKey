@@ -57,6 +57,7 @@ public class DeathListener implements Listener {
         for (Party party : dungeonKey.allParties) {
             if (party.getMembers().containsKey(player)) {
                 party.getMembers().put((Player) player, true);
+//                player.sendMessage(((Player) player).getDisplayName() + " died.");
             }
 
             Set<Boolean> deathBools = new HashSet<>(party.getMembers().values());
