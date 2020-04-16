@@ -4,6 +4,7 @@ import me.alec.dungeonkey.DungeonKey;
 import me.alec.dungeonkey.Items.KeyCreator;
 import me.alec.dungeonkey.Models.Party;
 import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
@@ -65,7 +66,7 @@ public class DeathListener implements Listener {
                 party.inDungeon = false;
                 party.dungeonName = "";
                 for (Player p : party.getMembers().keySet()) {
-                    p.sendMessage("Your entire party was slain.");
+                    p.sendMessage(ChatColor.RED + "Your entire party was slain.");
                     party.getMembers().put(p, false);
                 }
             }

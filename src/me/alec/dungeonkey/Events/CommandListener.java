@@ -52,7 +52,12 @@ public class CommandListener implements CommandExecutor {
                         } else {
                             player.sendMessage("Please specify a player to invite.");
                         }
+                    default:
+                        help(player);
+                        break;
                 }
+            } else {
+                help(player);
             }
         }
         System.out.println(dungeonKey.allParties + " < ALL PARTIES");
@@ -62,13 +67,24 @@ public class CommandListener implements CommandExecutor {
     private void createParty(Player player) {
         for (Party party : dungeonKey.allParties) {
             if (party.getMembers().containsKey(player)) {
-                player.sendMessage("You're already in a party! Please leave your party with /dk leave to leave your current party.");
+                player.sendMessage(ChatColor.RED + "You're already in a party! Please leave your party with /dk leave to leave your current party.");
                 return;
             }
         }
         Party newParty = new Party(player);
         dungeonKey.allParties.add(newParty);
-        player.sendMessage("Successfully created a party.");
+        player.sendMessage(ChatColor.GREEN + "Successfully created a party.");
+    }
+
+    private void help(Player player) {
+        player.sendMessage(
+        "-----" + ChatColor.GOLD + "Dungeon Key Help" + ChatColor.WHITE + "-----" +
+            ChatColor.GOLD + "\n/dk create " + ChatColor.WHITE + "- Create a party" +
+            ChatColor.GOLD + "\n/dk invite <player> " + ChatColor.WHITE + "- Invite a player to your party" +
+            ChatColor.GOLD + "\n/dk leave " + ChatColor.WHITE + "- Leave current party" +
+            ChatColor.GOLD + "\n/dk disband " + ChatColor.WHITE + "- Disband current party" +
+            ChatColor.GOLD + "\n/dk party " + ChatColor.WHITE + "- View current party"
+        );
     }
 
     private void leaveParty(Player player) {
@@ -81,13 +97,13 @@ public class CommandListener implements CommandExecutor {
                     dungeonKey.allParties.remove(party);
                 }
 
-                player.sendMessage("You have left your current party.");
+                player.sendMessage(ChatColor.GREEN +"You have left your current party.");
                 for (Player p : party.getMembers().keySet()) {
-                    p.sendMessage(player.getDisplayName() + " has left the party.");
+                    p.sendMessage(player.getDisplayName() + ChatColor.RED + " has left the party.");
                 }
                 return;
             } else {
-                player.sendMessage("You are not currently in a party.");
+                player.sendMessage(ChatColor.RED + "You are not currently in a party.");
             }
         }
     }
@@ -97,13 +113,13 @@ public class CommandListener implements CommandExecutor {
             if (party.getInvitedMembers().contains(player)) {
                 party.members.put(player, false);
                 party.invitedMembers.remove(player);
-                player.sendMessage("You accepted the invite to join the party.");
+                player.sendMessage(ChatColor.GREEN + "You accepted the invite to join the party.");
                 for (Player p : party.getMembers().keySet()) {
                     p.sendMessage(player.getDisplayName() + " has joined the party.");
                 }
                 return;
             } else {
-                player.sendMessage("You don't have any pending invites.");
+                player.sendMessage(ChatColor.RED + "You don't have any pending invites.");
             }
         }
     }
@@ -112,7 +128,7 @@ public class CommandListener implements CommandExecutor {
         for (Party party : dungeonKey.allParties) {
             if (party.getInvitedMembers().contains(player)) {
                 party.invitedMembers.remove(player);
-                player.sendMessage("You denied the invite to join the party.");
+                player.sendMessage(ChatColor.RED + "You denied the invite to join the party.");
                 return;
             }
         }
@@ -121,14 +137,14 @@ public class CommandListener implements CommandExecutor {
     private void disbandParty(Player player) {
         for (Party party : dungeonKey.allParties) {
             if (party.getHost() == player) {
-                player.sendMessage("You disbanded the party.");
+                player.sendMessage(ChatColor.RED + "You disbanded the party.");
                 for (Player p : party.getMembers().keySet()) {
-                    p.sendMessage("Your party was disbanded.");
+                    p.sendMessage(ChatColor.RED + "Your party was disbanded.");
                 }
                 dungeonKey.allParties.remove(party);
                 return;
             } else {
-                player.sendMessage("You need to be the host of a party to disband it!");
+                player.sendMessage(ChatColor.RED + "You need to be the host of a party to disband it!");
             }
         }
     }
@@ -140,30 +156,30 @@ public class CommandListener implements CommandExecutor {
                 return;
             }
         }
-        player.sendMessage("You are not currently in a party.");
+        player.sendMessage(ChatColor.RED + "You are not currently in a party.");
     }
 
     private void inviteToParty(Player host, String inviteeName) {
         Player invitee = dungeonKey.getServer().getPlayerExact(inviteeName);
-        System.out.println(invitee + " < invitee");
         if (invitee == null) {
-            host.sendMessage("Player not found.");
+            host.sendMessage(ChatColor.RED + "Player not found.");
         } else if (host == invitee) {
-            host.sendMessage("You can't invite yourself to a party!");
+            host.sendMessage(ChatColor.RED + "You can't invite yourself to a party!");
         } else {
             if (dungeonKey.allParties.size() > 0) {
                 for (Party party : dungeonKey.allParties) {
                     if (party.getHost() == host) {
                         party.invitedMembers.add(invitee);
-                        host.sendMessage("Invited " + inviteeName + " to join your party.");
-                        invitee.sendMessage("You have been invited to join " + host.getDisplayName() + "'s party. " +
-                                "\nType /dk accept to accept the invite or /dk deny to deny the invite.");
+                        host.sendMessage(ChatColor.GREEN + "Invited " + inviteeName + ChatColor.GREEN + " to join your party.");
+                        invitee.sendMessage(ChatColor.GREEN + "You have been invited to join " +
+                                host.getDisplayName() + ChatColor.GREEN +  "'s party. " +
+                                ChatColor.GREEN +  "\nType /dk accept to accept the invite or /dk deny to deny the invite.");
                     } else {
-                        host.sendMessage("You are not the host of a party.");
+                        host.sendMessage(ChatColor.RED + "You are not the host of a party.");
                     }
                 }
             } else {
-                host.sendMessage("You are not the host of a party.");
+                host.sendMessage(ChatColor.RED + "You are not the host of a party.");
             }
         }
     }

@@ -2,6 +2,7 @@ package me.alec.dungeonkey.Events;
 
 import me.alec.dungeonkey.DungeonKey;
 import me.alec.dungeonkey.Models.Party;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,7 +22,7 @@ public class QuitListener implements Listener {
             if (party.getMembers().containsKey(player)) {
                 party.members.remove(player);
                 for (Player p : party.getMembers().keySet()) {
-                    p.sendMessage(player.getDisplayName() + " disconnected and left the party.");
+                    p.sendMessage(player.getDisplayName() + ChatColor.RED + " disconnected and left the party.");
                 }
 
                 if (party.getMembers().size() < 1) {

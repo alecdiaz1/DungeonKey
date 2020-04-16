@@ -3,6 +3,7 @@ package me.alec.dungeonkey.Events;
 import me.alec.dungeonkey.DungeonKey;
 import me.alec.dungeonkey.HiddenStringUtils;
 import me.alec.dungeonkey.Models.Party;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -48,13 +49,13 @@ public class UseKeyListener implements Listener {
                                     if (!playerParty.inDungeon) {
                                         teleportPlayers(playerParty, key, item);
                                     } else {
-                                        player.sendMessage("You are already in a dungeon!");
+                                        player.sendMessage(ChatColor.RED + "You are already in a dungeon!");
                                     }
                                 } else {
-                                    player.sendMessage("You must be the host of a party to do start a dungeon!");
+                                    player.sendMessage(ChatColor.RED + "You must be the host of a party to do start a dungeon!");
                                 }
                             } else {
-                                player.sendMessage("You must be the host of a party to do start a dungeon!");
+                                player.sendMessage(ChatColor.RED + "You must be the host of a party to do start a dungeon!");
                             }
                         }
                     }
@@ -79,7 +80,7 @@ public class UseKeyListener implements Listener {
         // Check if any party in dungeon already, return false if so
 
         for (Player player: party.getMembers().keySet()) {
-            player.sendMessage("Teleporting to the dungeon in 5 seconds. Any movement will cancel this.");
+            player.sendMessage(ChatColor.GREEN + "Teleporting to the dungeon in 5 seconds. Any movement will cancel this.");
         }
 
         dungeonKey.tasks.put(party, new BukkitRunnable() {
@@ -99,7 +100,7 @@ public class UseKeyListener implements Listener {
 
                     for (Party dungeonParty : dungeonKey.allParties) {
                         if (dungeonParty.getDungeonName().equals(key)) {
-                            party.getHost().sendMessage("Another party is currently in the dungeon.");
+                            party.getHost().sendMessage(ChatColor.RED + "Another party is currently in the dungeon.");
                             this.cancel();
                             dungeonKey.tasks.remove(party);
                         }
