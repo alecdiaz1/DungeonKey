@@ -22,9 +22,7 @@ public class CommandListener implements CommandExecutor {
             FileConfiguration config =  dungeonKey.getConfig();
 
             Player player = (Player) sender;
-
-            player.sendMessage("command received");
-
+            
             if (args.length > 0) {
                 String action = args[0].toLowerCase();
                 switch(action) {
@@ -152,7 +150,14 @@ public class CommandListener implements CommandExecutor {
     private void getParty(Player player) {
         for (Party party : dungeonKey.allParties) {
             if (party.getMembers().containsKey(player)) {
-                player.sendMessage("Your party: " + party.getMembers().toString());
+                for (Player p : party.getMembers().keySet()) {
+                    if (p == party.getHost()) {
+                        player.sendMessage(ChatColor.GOLD + "Party Host: " + p.getDisplayName());
+                    } else {
+                        player.sendMessage(p.getDisplayName());
+
+                    }
+                }
                 return;
             }
         }
