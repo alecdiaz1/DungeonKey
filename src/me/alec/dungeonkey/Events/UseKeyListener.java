@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,14 +46,7 @@ public class UseKeyListener implements Listener {
                             if (playerParty != null) {
                                 if (playerParty.getHost() == player) {
                                     if (!playerParty.inDungeon) {
-                                        if (teleportPlayers(playerParty, key)) {
-                                            item.setAmount(0);
-                                            playerParty.dungeonName = key;
-                                            playerParty.inDungeon = true;
-                                        } else {
-                                            player.sendMessage("Another party is currently in the dungeon.");
-                                        }
-                                        // Crashes if try to use inventory.remove()
+                                        teleportPlayers(playerParty, key, item);
                                     } else {
                                         player.sendMessage("You are already in a dungeon!");
                                     }
@@ -78,32 +72,48 @@ public class UseKeyListener implements Listener {
         return false;
     }
 
-    private boolean teleportPlayers(Party party, String key) {
+    private boolean teleportPlayers(Party party, String key, ItemStack item) {
         FileConfiguration configOriginal = dungeonKey.getConfig();
         ConfigurationSection config = configOriginal.getConfigurationSection("keys");
 
         // Check if any party in dungeon already, return false if so
-        for (Party p : dungeonKey.allParties) {
-            if (p.getDungeonName().equals(key)) {
-                return false;
+
+        for (Player player: party.getMembers().keySet()) {
+            player.sendMessage("Teleporting to the dungeon in 5 seconds. Any movement will cancel this.");
+        }
+
+        dungeonKey.tasks.put(party, new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Player p : party.getMembers().keySet()) {
+                    String world = config.getString(key + ".world");
+                    assert world != null;
+                    Location location = new Location(
+                            dungeonKey.getServer().getWorld(world),
+                            config.getDouble(key + ".coordinates.x"),
+                            config.getDouble(key + ".coordinates.y"),
+                            config.getDouble(key + ".coordinates.z"),
+                            (float) config.getDouble(key + ".coordinates.yaw"),
+                            (float) config.getDouble(key + ".coordinates.pitch")
+                    );
+
+                    for (Party dungeonParty : dungeonKey.allParties) {
+                        if (dungeonParty.getDungeonName().equals(key)) {
+                            party.getHost().sendMessage("Another party is currently in the dungeon.");
+                            this.cancel();
+                            dungeonKey.tasks.remove(party);
+                        }
+                    }
+
+                    party.dungeonName = key;
+                    party.inDungeon = true;
+                    p.teleport(location);
+                    if (p.getInventory().contains(item)) {
+                        p.getInventory().remove(item);
+                    }
+                }
             }
-        }
-
-        String world = config.getString(key + ".world");
-        assert world != null;
-        Location location = new Location(
-                dungeonKey.getServer().getWorld(world),
-                config.getDouble(key + ".coordinates.x"),
-                config.getDouble(key + ".coordinates.y"),
-                config.getDouble(key + ".coordinates.z"),
-                (float) config.getDouble(key + ".coordinates.yaw"),
-                (float) config.getDouble(key + ".coordinates.pitch")
-        );
-
-        for (Player p : party.getMembers().keySet()) {
-            p.teleport(location);
-        }
-
+        }.runTaskLater(dungeonKey, 100)); // Divide by 20 to get seconds
         return true;
     }
 
@@ -115,7 +125,6 @@ public class UseKeyListener implements Listener {
         }
         return null;
     }
-
 
     private Party getHostParty(Player player) {
         for (Party party : dungeonKey.allParties) {
