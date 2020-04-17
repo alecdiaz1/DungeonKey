@@ -22,7 +22,7 @@ public class CommandListener implements CommandExecutor {
             FileConfiguration config =  dungeonKey.getConfig();
 
             Player player = (Player) sender;
-            
+
             if (args.length > 0) {
                 String action = args[0].toLowerCase();
                 switch(action) {
@@ -50,6 +50,7 @@ public class CommandListener implements CommandExecutor {
                         } else {
                             player.sendMessage("Please specify a player to invite.");
                         }
+                        break;
                     default:
                         help(player);
                         break;
@@ -81,7 +82,9 @@ public class CommandListener implements CommandExecutor {
             ChatColor.GOLD + "\n/dk invite <player> " + ChatColor.WHITE + "- Invite a player to your party" +
             ChatColor.GOLD + "\n/dk leave " + ChatColor.WHITE + "- Leave current party" +
             ChatColor.GOLD + "\n/dk disband " + ChatColor.WHITE + "- Disband current party" +
-            ChatColor.GOLD + "\n/dk party " + ChatColor.WHITE + "- View current party"
+            ChatColor.GOLD + "\n/dk party " + ChatColor.WHITE + "- View current party" +
+            ChatColor.GOLD + "\n/dk accept" + ChatColor.WHITE + "- Accept a party invite" +
+            ChatColor.GOLD + "\n/dk reject" + ChatColor.WHITE + "- Reject a party invite"
         );
     }
 
@@ -173,7 +176,9 @@ public class CommandListener implements CommandExecutor {
         } else {
             if (dungeonKey.allParties.size() > 0) {
                 for (Party party : dungeonKey.allParties) {
-                    if (party.getHost() == host) {
+                    if (party.getMembers().containsKey(invitee)) {
+                        host.sendMessage(ChatColor.RED + "That player is already in a party.");
+                    } else if (party.getHost() == host) {
                         party.invitedMembers.add(invitee);
                         host.sendMessage(ChatColor.GREEN + "Invited " + inviteeName + ChatColor.GREEN + " to join your party.");
                         invitee.sendMessage(ChatColor.GREEN + "You have been invited to join " +
