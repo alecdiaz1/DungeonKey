@@ -140,7 +140,9 @@ public class CommandListener implements CommandExecutor {
             if (party.getHost() == player) {
                 player.sendMessage(ChatColor.RED + "You disbanded the party.");
                 for (Player p : party.getMembers().keySet()) {
-                    p.sendMessage(ChatColor.RED + "Your party was disbanded.");
+                    if (p != party.getHost()) {
+                        p.sendMessage(ChatColor.RED + "Your party was disbanded.");
+                    }
                 }
                 dungeonKey.allParties.remove(party);
                 return;
@@ -153,12 +155,10 @@ public class CommandListener implements CommandExecutor {
     private void getParty(Player player) {
         for (Party party : dungeonKey.allParties) {
             if (party.getMembers().containsKey(player)) {
+                player.sendMessage(ChatColor.GOLD + "Party Host: " + party.getHost().getDisplayName());
                 for (Player p : party.getMembers().keySet()) {
-                    if (p == party.getHost()) {
-                        player.sendMessage(ChatColor.GOLD + "Party Host: " + p.getDisplayName());
-                    } else {
-                        player.sendMessage(p.getDisplayName());
-
+                    if (p != party.getHost()) {
+                        player.sendMessage(ChatColor.GOLD + "\n - " + p.getDisplayName());
                     }
                 }
                 return;
