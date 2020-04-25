@@ -1,7 +1,7 @@
 # List of materials https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 globals:
   # For use in testing
-#  dropRate: 50
+  #  dropRate: 50
   dropRate: .5
 keys:
   iceDungeon:
@@ -15,11 +15,27 @@ keys:
     material: SKELETON_SKULL
     displayName: Ice Dungeon Key
     item-lore: Right click to teleport to the Ice Dungeon!
-    dropRate: 0.5
+    dropRate: 0
     reset-block-coordinates:
       x: 41
       y: 80
       z: -500
+  wizDungeon:
+    world: builderworld
+    coordinates:
+      x: -175
+      y: 44
+      z: -789
+      yaw: 0
+      pitch: 0
+    Material: WITCH_SPAWN_EGG
+    displayName: Wizard Dungeon Key
+    item-loer: Right click to take on the cult of Alphonzus!
+    dropRate: 0.5
+    reset-block-coordinates:
+      x: -169
+      y: 4
+      z: -801
   endDungeon:
     world: builderworld
     coordinates:
@@ -31,7 +47,7 @@ keys:
     material: ZOMBIE_HEAD
     displayName: End Dungeon Key
     item-lore: Right click to teleport to the End Dungeon!
-    dropRate: 0.3
+    dropRate: 0
   waterDungeon:
     world: builderworld
     coordinates:
@@ -43,14 +59,14 @@ keys:
     material: CREEPER_HEAD
     displayName: Water Dungeon Key
     item-lore: Right click to teleport to the Water Dungeon!
-    dropRate: 0.3
+    dropRate: 0
 # Use no punctuation on bosses
 # ex. Mad Scientist -> madscientist
 exitKey:
   world: builderworld
   coordinates:
     x: 220.0
-    y: 152.0
+    y: 153.0
     z: -577.0
     yaw: 90
     pitch: 0
