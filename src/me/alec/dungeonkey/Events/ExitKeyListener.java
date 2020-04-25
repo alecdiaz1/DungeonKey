@@ -5,6 +5,8 @@ import me.alec.dungeonkey.HiddenStringUtils;
 import me.alec.dungeonkey.Models.Party;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -39,7 +41,9 @@ public class ExitKeyListener implements Listener {
                     if (playerParty != null) {
                         if (playerParty.getHost() == player) {
                             String name = HiddenStringUtils.extractHiddenString(itemLore.get(0));
-                            teleportPlayers(playerParty, item);
+                            if (name.equals("exitKey")) {
+                                teleportPlayers(playerParty, item);
+                            }
                         }
                     }
                 }
@@ -75,11 +79,23 @@ public class ExitKeyListener implements Listener {
                 p.teleport(location);
                 p.sendMessage(ChatColor.RED + "Dungeon finished, party disbanded.");
                 if (p.getInventory().contains(item)) {
-                    p.getInventory().remove(item);
+                        p.getInventory().remove(item);
                 }
-            }
 
-            dungeonKey.allParties.remove(party);
+                String resetConfigPath = "keys." + party.dungeonName + ".reset-block-coordinates.";
+                Block block = dungeonKey.getServer().getWorld("builderworld").getBlockAt(
+                        config.getInt(resetConfigPath + "x"),
+                        config.getInt(resetConfigPath + "y"),
+                        config.getInt(resetConfigPath + "z")
+                );
+                System.out.print(party.dungeonName + " < DUNGEON NAME");
+                System.out.println(resetConfigPath + ".x" + " < RESET X");
+                System.out.println(config.getInt(resetConfigPath + "x") + " < X RESET");
+                System.out.println(block + " < BLOCK");
+                block.setType(Material.REDSTONE_BLOCK);
+
+                dungeonKey.allParties.remove(party);
+                }
             }
         }.runTaskLater(dungeonKey, 100)); // Divide by 20 to get seconds
         return true;

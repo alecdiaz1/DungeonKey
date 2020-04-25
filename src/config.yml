@@ -1,6 +1,8 @@
 # List of materials https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 globals:
+  # For use in testing
   dropRate: 50
+#  dropRate: .5
 keys:
   iceDungeon:
     world: builderworld
@@ -14,6 +16,10 @@ keys:
     displayName: Ice Dungeon Key
     item-lore: Right click to teleport to the Ice Dungeon!
     dropRate: 0.5
+    reset-block-coordinates:
+      x: 41
+      y: 80
+      z: -500
   endDungeon:
     world: builderworld
     coordinates:
