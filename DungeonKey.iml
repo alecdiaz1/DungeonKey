@@ -17,5 +17,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="spigot_1.15.2" level="project" />
+    <orderEntry type="library" name="MythicMobs-4.9.0" level="project" />
+    <orderEntry type="library" name="LevelledMobs-1.28-RELEASE" level="project" />
   </component>
 </module>

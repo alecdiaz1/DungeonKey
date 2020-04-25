@@ -59,7 +59,7 @@ public class CommandListener implements CommandExecutor {
                 help(player);
             }
         }
-        System.out.println(dungeonKey.allParties + " < ALL PARTIES");
+//        System.out.println(dungeonKey.allParties + " < ALL PARTIES");
         return true;
     }
 

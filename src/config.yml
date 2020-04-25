@@ -38,3 +38,18 @@ keys:
     displayName: Water Dungeon Key
     item-lore: Right click to teleport to the Water Dungeon!
     dropRate: 0.3
+# Use no punctuation on bosses
+# ex. Mad Scientist -> madscientist
+exitKey:
+  world: builderworld
+  coordinates:
+    x: 220.0
+    y: 152.0
+    z: -577.0
+    yaw: 90
+    pitch: 0
+  material: ZOMBIE_HEAD
+  displayName: Exit Key
+  item-lore: Right click to teleport back to spawn!
+bosses:
+  - madscientist

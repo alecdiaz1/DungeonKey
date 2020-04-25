@@ -1,9 +1,11 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="DungeonKey:jar">
-    <output-path>C:/Quarantine4Ever/plugins</output-path>
+    <output-path>D:/CrescentDungeons/_/plugins</output-path>
     <root id="archive" name="DungeonKey.jar">
       <element id="module-output" name="DungeonKey" />
-      <element id="extracted-dir" path="C:/Quarantine4Ever/spigot_1.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/CrescentDungeons/_/plugins/MythicMobs-4.9.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/CrescentDungeons/_/spigot_1.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/CrescentDungeons/_/plugins/LevelledMobs-1.28-RELEASE.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

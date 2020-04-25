@@ -1,6 +1,16 @@
 package me.alec.dungeonkey.Events;
 
+import io.lumine.xikage.mythicmobs.MythicMobs;
+import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent;
+import io.lumine.xikage.mythicmobs.mobs.MobManager;
+import io.lumine.xikage.mythicmobs.mobs.MobRegistry;
+import io.lumine.xikage.mythicmobs.mobs.MythicMob;
+import io.lumine.xikage.mythicmobs.mobs.MythicMobStack;
+import io.lumine.xikage.mythicmobs.mobs.entities.MythicEntity;
+import io.lumine.xikage.mythicmobs.mobs.entities.MythicEntityType;
+import io.lumine.xikage.mythicmobs.util.MythicUtil;
 import me.alec.dungeonkey.DungeonKey;
+import me.alec.dungeonkey.Items.ExitKeyCreator;
 import me.alec.dungeonkey.Items.KeyCreator;
 import me.alec.dungeonkey.Models.Party;
 import org.apache.commons.lang.ArrayUtils;
@@ -15,10 +25,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class DeathListener implements Listener {
     private final DungeonKey dungeonKey;
@@ -30,13 +37,28 @@ public class DeathListener implements Listener {
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
-        Entity slainEntity = event.getEntity();
+        FileConfiguration config = dungeonKey.getConfig();
 
-        if (slainEntity instanceof Monster) {
+        Entity slainEntity = event.getEntity();
+        String sanitizedName = slainEntity.getName().replaceAll("\\s|[^a-zA-Z0-9]","").toLowerCase();
+        System.out.println(config.getStringList("bosses"));
+
+        if (config.getStringList("bosses").contains(sanitizedName)) {
+            processBossDeath(slainEntity);
+        } else if (slainEntity instanceof Monster) {
             processMonsterDeath(slainEntity);
         } else if (slainEntity instanceof Player) {
             processPlayerDeath(slainEntity);
         }
+    }
+
+    private void processBossDeath(Entity slainEntity) {
+        System.out.println("BOSS DIED");
+        ItemStack newExitKey = new ExitKeyCreator(dungeonKey).createKey("exitKey");
+
+        slainEntity.getLocation().getWorld().dropItem(
+                slainEntity.getLocation(),
+                newExitKey);
     }
 
     private void processMonsterDeath(Entity slainEntity) {

@@ -17,6 +17,7 @@ public class DungeonKey extends JavaPlugin {
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
 
+        this.getServer().getPluginManager().registerEvents(new ExitKeyListener(this), this);
         this.getServer().getPluginManager().registerEvents(new UseKeyListener(this), this);
         this.getServer().getPluginManager().registerEvents(new DeathListener(this), this);
         this.getServer().getPluginManager().registerEvents(new QuitListener(this), this);
