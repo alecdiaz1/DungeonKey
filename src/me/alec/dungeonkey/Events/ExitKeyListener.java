@@ -88,10 +88,7 @@ public class ExitKeyListener implements Listener {
                         config.getInt(resetConfigPath + "y"),
                         config.getInt(resetConfigPath + "z")
                 );
-                System.out.print(party.dungeonName + " < DUNGEON NAME");
-                System.out.println(resetConfigPath + ".x" + " < RESET X");
-                System.out.println(config.getInt(resetConfigPath + "x") + " < X RESET");
-                System.out.println(block + " < BLOCK");
+
                 block.setType(Material.REDSTONE_BLOCK);
 
                 dungeonKey.allParties.remove(party);

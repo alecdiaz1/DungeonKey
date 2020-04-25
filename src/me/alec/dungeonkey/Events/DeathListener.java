@@ -79,17 +79,16 @@ public class DeathListener implements Listener {
                 Set<Boolean> deathBools = new HashSet<>(party.getMembers().values());
                 if (deathBools.size() <= 1) {
                     for (Player p : party.getMembers().keySet()) {
-                        FileConfiguration configOriginal = dungeonKey.getConfig();
-                        ConfigurationSection config = configOriginal.getConfigurationSection("keys." + party.dungeonName + ".reset-block-coordinates");
+                        FileConfiguration config = dungeonKey.getConfig();
 
                         p.sendMessage(ChatColor.RED + "Your entire party was slain. Party was disbanded.");
-                        assert config != null;
-                        System.out.println(config.getInt("x") + " < RESET X");
+                        String resetConfigPath = "keys." + party.dungeonName + ".reset-block-coordinates.";
                         Block block = dungeonKey.getServer().getWorld("builderworld").getBlockAt(
-                                config.getInt("x"),
-                                config.getInt("y"),
-                                config.getInt("z")
+                                config.getInt(resetConfigPath + "x"),
+                                config.getInt(resetConfigPath + "y"),
+                                config.getInt(resetConfigPath + "z")
                         );
+
                         block.setType(Material.REDSTONE_BLOCK);
                         dungeonKey.allParties.remove(party);
                     }
